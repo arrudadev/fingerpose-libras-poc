@@ -15,43 +15,20 @@ declare global {
 
 export function Webcam() {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const frame = useRef(0)
   let detector: any
 
   function browserSupportMediaDevices() {
     return navigator?.mediaDevices || navigator?.mediaDevices.getUserMedia
   }
 
-  async function loadModel() {
-    if (!detector) {
-      const handsVersion = window.VERSION
-      const detectorConfig = {
-        runtime: 'mediapipe', // or 'tfjs',
-        solutionPath: `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${handsVersion}`,
-        // full é o mais pesado e o mais preciso
-        modelType: 'lite',
-        maxHands: 2,
-      }
-
-      detector = await window.handPoseDetection.createDetector(
-        window.handPoseDetection.SupportedModels.MediaPipeHands,
-        detectorConfig,
-      )
-    }
+  function getCamera() {
+    return videoRef.current as HTMLVideoElement
   }
 
-  async function estimateHands(camera: HTMLVideoElement) {
-    const predictions = await detector.estimateHands(camera, {
-      flipHorizontal: true,
-    })
+  async function setupCamera() {
+    const camera = getCamera()
 
-    if (predictions?.length) console.log(predictions)
-
-    // eslint-disable-next-line
-    // @ts-ignore
-    // requestAnimationFrame(estimateHands(camera))
-  }
-
-  async function setupCamera(camera: HTMLVideoElement) {
     const videoConfig = {
       audio: false,
       video: {
@@ -75,6 +52,41 @@ export function Webcam() {
     camera.play()
   }
 
+  async function loadModel() {
+    if (!detector) {
+      const handsVersion = window.VERSION
+      const detectorConfig = {
+        runtime: 'mediapipe',
+        solutionPath: `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${handsVersion}`,
+        modelType: 'lite',
+        maxHands: 2,
+      }
+
+      detector = await window.handPoseDetection.createDetector(
+        window.handPoseDetection.SupportedModels.MediaPipeHands,
+        detectorConfig,
+      )
+    }
+  }
+
+  async function estimateHands() {
+    const camera = getCamera()
+
+    const predictions = await detector.estimateHands(camera, {
+      flipHorizontal: true,
+    })
+
+    if (predictions?.length) console.log(predictions)
+
+    estimateHandsFrameLoop()
+  }
+
+  function estimateHandsFrameLoop() {
+    // eslint-disable-next-line
+    // @ts-ignore
+    frame.current = requestAnimationFrame(estimateHands)
+  }
+
   async function init() {
     if (!browserSupportMediaDevices()) {
       throw new Error(
@@ -82,15 +94,16 @@ export function Webcam() {
       )
     }
 
-    const camera = videoRef.current as HTMLVideoElement
-
-    await setupCamera(camera)
+    await setupCamera()
     await loadModel()
-    await estimateHands(camera)
+
+    estimateHandsFrameLoop()
   }
 
   useEffect(() => {
     init()
+
+    return () => cancelAnimationFrame(frame.current)
   }, [])
 
   return (
