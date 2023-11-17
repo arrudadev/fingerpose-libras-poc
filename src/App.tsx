@@ -1,4 +1,4 @@
-import { Webcam } from './components/Video'
+import { Webcam } from './components/Webcam'
 import { Title } from './components/Title'
 import { Output } from './components/Output'
 
