@@ -87,10 +87,12 @@ export function App() {
     for (const hand of predictions) {
       if (!hand.keypoints3D) continue
 
-      const { gestures } = await fingerposeGestureEstimator.estimate(
+      const { gestures, poseData } = await fingerposeGestureEstimator.estimate(
         getLandMarksFromKeypoints(hand.keypoints3D),
         TRUST_PERCENTAGE,
       )
+
+      console.log(poseData)
 
       if (!gestures.length) {
         setDetectedSign('')
