@@ -4,5 +4,6 @@ import { CSign } from './CSign'
 import { DSign } from './DSign'
 import { ESign } from './ESign'
 import { FSign } from './FSign'
+import { GSign } from './GSign'
 
-export const knownGestures = [ASign, BSign, CSign, DSign, ESign, FSign]
+export const knownGestures = [ASign, BSign, CSign, DSign, ESign, FSign, GSign]
