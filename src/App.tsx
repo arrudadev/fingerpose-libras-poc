@@ -7,6 +7,7 @@ import 'https://cdn.jsdelivr.net/npm/fingerpose@0.1.0/dist/fingerpose.min.js'
 import { useEffect, useRef, useState } from 'react'
 
 import { knownGestures } from './signs'
+import { detectSign } from './utils/detectSign'
 
 export function App() {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -81,21 +82,21 @@ export function App() {
     ])
   }
 
-  async function* fingerposeEstimateHands(predictions: any) {
+  async function fingerposeEstimateHands(
+    handsPredictions: any,
+  ): Promise<{ sign: string; hand: string }[]> {
+    const predictions = []
     const TRUST_PERCENTAGE = 8.5 // 85%
 
-    for (const hand of predictions) {
+    for (const hand of handsPredictions) {
       if (!hand.keypoints3D) continue
 
-      const { gestures, poseData } = await fingerposeGestureEstimator.estimate(
+      const { gestures } = await fingerposeGestureEstimator.estimate(
         getLandMarksFromKeypoints(hand.keypoints3D),
         TRUST_PERCENTAGE,
       )
 
-      console.log(poseData)
-
       if (!gestures.length) {
-        setDetectedSign('')
         continue
       }
 
@@ -103,21 +104,24 @@ export function App() {
         previous.score > current.score ? previous : current,
       )
 
-      yield { sign: sign.name }
+      predictions.push({ sign: sign.name, hand: hand.handedness })
     }
+
+    return predictions
   }
 
   async function estimateHands() {
     const camera = getCamera()
 
-    const predictions = await detector.estimateHands(camera, {
+    const handsPredictions = await detector.estimateHands(camera, {
       flipHorizontal: true,
     })
 
-    if (predictions?.length) {
-      for await (const { sign } of fingerposeEstimateHands(predictions)) {
-        setDetectedSign(sign)
-      }
+    if (handsPredictions?.length) {
+      const fingerposePredictions =
+        await fingerposeEstimateHands(handsPredictions)
+
+      setDetectedSign(detectSign(fingerposePredictions))
     }
 
     estimateHandsFrameLoop()

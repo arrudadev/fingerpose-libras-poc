@@ -1,6 +1,6 @@
 const { Finger, FingerCurl, FingerDirection, GestureDescription } = window.fp
 
-export const ILoveYouSign = new GestureDescription('Eu te amo')
+export const ILoveYouSign = new GestureDescription('i-love-you')
 
 for (const finger of [
   Finger.Thumb,
