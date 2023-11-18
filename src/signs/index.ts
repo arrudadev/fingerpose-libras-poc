@@ -1,19 +1,7 @@
-import { ASign } from './ASign'
-import { BSign } from './BSign'
-import { CSign } from './CSign'
-import { DSign } from './DSign'
-import { ESign } from './ESign'
-import { FSign } from './FSign'
-import { GSign } from './GSign'
-import { ISign } from './ISign'
+import { ASign } from './letters/ASign'
+import { ESign } from './letters/ESign'
+import { ISign } from './letters/ISign'
+import { OSign } from './letters/OSign'
+import { USign } from './letters/USing'
 
-export const knownGestures = [
-  ASign,
-  BSign,
-  CSign,
-  DSign,
-  ESign,
-  FSign,
-  GSign,
-  ISign,
-]
+export const knownGestures = [ASign, ESign, ISign, OSign, USign]
