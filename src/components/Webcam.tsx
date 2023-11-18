@@ -6,17 +6,13 @@ import 'https://cdn.jsdelivr.net/npm/fingerpose@0.1.0/dist/fingerpose.min.js'
 
 import { useEffect, useRef } from 'react'
 
-declare global {
-  interface Window {
-    VERSION: string
-    handPoseDetection: any
-  }
-}
+import { knownGestures } from '../signs'
 
 export function Webcam() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const frame = useRef(0)
   let detector: any
+  let fingerposeGestureEstimator: any
 
   function browserSupportMediaDevices() {
     return navigator?.mediaDevices || navigator?.mediaDevices.getUserMedia
@@ -69,6 +65,41 @@ export function Webcam() {
     }
   }
 
+  function setupFingerpose() {
+    const fingerpose = window.fp
+
+    fingerposeGestureEstimator = new fingerpose.GestureEstimator(knownGestures)
+  }
+
+  function getLandMarksFromKeypoints(keypoints3D: any) {
+    return keypoints3D.map((keypoint: { x: number; y: number; z: number }) => [
+      keypoint.x,
+      keypoint.y,
+      keypoint.z,
+    ])
+  }
+
+  async function* fingerposeEstimateHands(predictions: any) {
+    const TRUST_PERCENTAGE = 8.5 // 85%
+
+    for (const hand of predictions) {
+      if (!hand.keypoints3D) continue
+
+      const { gestures } = await fingerposeGestureEstimator.estimate(
+        getLandMarksFromKeypoints(hand.keypoints3D),
+        TRUST_PERCENTAGE,
+      )
+
+      if (!gestures.length) continue
+
+      const sign = gestures.reduce((previous: any, current: any) =>
+        previous.score > current.score ? previous : current,
+      )
+
+      yield { sign: sign.name }
+    }
+  }
+
   async function estimateHands() {
     const camera = getCamera()
 
@@ -76,7 +107,11 @@ export function Webcam() {
       flipHorizontal: true,
     })
 
-    if (predictions?.length) console.log(predictions)
+    if (predictions?.length) {
+      for await (const { sign } of fingerposeEstimateHands(predictions)) {
+        console.log(sign)
+      }
+    }
 
     estimateHandsFrameLoop()
   }
@@ -96,7 +131,7 @@ export function Webcam() {
 
     await setupCamera()
     await loadModel()
-
+    setupFingerpose()
     estimateHandsFrameLoop()
   }
 
