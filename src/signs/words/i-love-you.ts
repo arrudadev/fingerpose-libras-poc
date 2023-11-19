@@ -15,6 +15,8 @@ for (const finger of [
     finger === Finger.Pinky
   ) {
     ILoveYouSign.addCurl(finger, FingerCurl.NoCurl, 1.0)
+    ILoveYouSign.addDirection(finger, FingerDirection.HorizontalRight, 0.9)
+    ILoveYouSign.addDirection(finger, FingerDirection.HorizontalLeft, 0.9)
   } else {
     ILoveYouSign.addCurl(finger, FingerCurl.FullCurl, 1.0)
   }

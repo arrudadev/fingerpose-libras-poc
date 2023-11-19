@@ -86,15 +86,17 @@ export function App() {
     handsPredictions: any,
   ): Promise<{ sign: string; hand: string }[]> {
     const predictions = []
-    const TRUST_PERCENTAGE = 8.5 // 85%
+    const TRUST_PERCENTAGE = 9 // 90%
 
     for (const hand of handsPredictions) {
       if (!hand.keypoints3D) continue
 
-      const { gestures } = await fingerposeGestureEstimator.estimate(
+      const { gestures, poseData } = await fingerposeGestureEstimator.estimate(
         getLandMarksFromKeypoints(hand.keypoints3D),
         TRUST_PERCENTAGE,
       )
+
+      console.log(gestures, poseData)
 
       if (!gestures.length) {
         continue

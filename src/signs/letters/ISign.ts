@@ -13,6 +13,7 @@ for (const finger of [
     ISign.addCurl(finger, FingerCurl.NoCurl, 1.0)
   } else {
     ISign.addCurl(finger, FingerCurl.FullCurl, 1.0)
+    ISign.addCurl(finger, FingerCurl.HalfCurl, 0.9)
   }
 
   ISign.addDirection(finger, FingerDirection.VerticalUp, 1.0)

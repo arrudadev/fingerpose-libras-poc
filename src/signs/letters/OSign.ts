@@ -10,7 +10,9 @@ for (const finger of [
   Finger.Pinky,
 ]) {
   OSign.addCurl(finger, FingerCurl.HalfCurl, 1.0)
-
+  OSign.addCurl(finger, FingerCurl.FullCurl, 0.9)
   OSign.addDirection(finger, FingerDirection.DiagonalUpRight, 0.9)
   OSign.addDirection(finger, FingerDirection.DiagonalUpLeft, 0.9)
+  OSign.addDirection(finger, FingerDirection.HorizontalRight, 0.9)
+  OSign.addDirection(finger, FingerDirection.HorizontalLeft, 0.9)
 }
