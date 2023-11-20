@@ -33,6 +33,8 @@ export function detectSign(handsPredictions: HandPrediction[]) {
           detectedSign = ''
           break
         }
+      } else if (sign.needTwoHands && handsPredictions.length === 1) {
+        continue
       } else {
         const firstHandSign = sign[firstHandPrediction.hand.toLocaleLowerCase()]
 
