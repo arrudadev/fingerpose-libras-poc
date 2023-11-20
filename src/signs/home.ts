@@ -13,6 +13,6 @@ for (const finger of [
   HomeLeftSign.addCurl(finger, FingerCurl.NoCurl, 1.0)
   HomeRightSign.addCurl(finger, FingerCurl.NoCurl, 1.0)
 
-  HomeLeftSign.addDirection(finger, FingerDirection.DiagonalUpRight, 0.9)
-  HomeRightSign.addDirection(finger, FingerDirection.DiagonalUpLeft, 0.9)
+  HomeLeftSign.addDirection(finger, FingerDirection.DiagonalUpRight, 1.0)
+  HomeRightSign.addDirection(finger, FingerDirection.DiagonalUpLeft, 1.0)
 }

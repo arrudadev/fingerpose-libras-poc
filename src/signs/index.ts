@@ -1,21 +1,15 @@
-// letters
-import { ASign } from './letters/ASign'
-import { ESign } from './letters/ESign'
-import { ISign } from './letters/ISign'
-import { OSign } from './letters/OSign'
-import { USign } from './letters/USing'
-
-// words
-import { ILoveYouSign } from './words/i-love-you'
-import { HomeLeftSign, HomeRightSign } from './words/home'
+import { ILoveYouSign } from './i-love-you'
+import { HomeLeftSign, HomeRightSign } from './home'
+import { BallLeftSign, BallRightSign } from './ball'
+import { PositiveSign } from './PositiveSign'
+import { NegativeSign } from './NegativeSign'
 
 export const knownGestures = [
-  ASign,
-  ESign,
-  ISign,
-  OSign,
-  USign,
   ILoveYouSign,
   HomeLeftSign,
   HomeRightSign,
+  BallLeftSign,
+  BallRightSign,
+  PositiveSign,
+  NegativeSign,
 ]

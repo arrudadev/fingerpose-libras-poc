@@ -12,7 +12,7 @@ export function detectSign(handsPredictions: HandPrediction[]) {
     const firstHandPrediction = handsPredictions[0]
 
     for (const sign of signs) {
-      if (sign.needTwoHands) {
+      if (sign.needTwoHands && handsPredictions.length === 2) {
         try {
           const secondHandPrediction = handsPredictions[1]
 
