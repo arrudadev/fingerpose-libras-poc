@@ -123,9 +123,7 @@ export function App() {
       const fingerposePredictions =
         await fingerposeEstimateHands(handsPredictions)
 
-      const test = detectSign(fingerposePredictions)
-      console.log(test)
-      setDetectedSign(test)
+      setDetectedSign(detectSign(fingerposePredictions))
     }
 
     estimateHandsFrameLoop()
