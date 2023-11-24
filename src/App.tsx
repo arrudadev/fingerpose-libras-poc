@@ -29,21 +29,21 @@ export function App() {
   async function setupCamera() {
     const camera = getCamera()
 
-    camera.height = globalThis.screen.height
-    camera.width = globalThis.screen.width
+    // camera.height = globalThis.screen.height
+    // camera.width = globalThis.screen.width
 
     const videoConfig = {
       audio: false,
       video: {
-        width: globalThis.screen.width,
-        height: globalThis.screen.height,
-        frameRate: {
-          ideal: 60,
-        },
-        facingMode: {
-          exact: 'user',
-        },
-        zoom: 100,
+        // width: globalThis.screen.width,
+        // height: globalThis.screen.height,
+        // frameRate: {
+        //   ideal: 60,
+        // },
+        // facingMode: {
+        //   exact: 'user',
+        // },
+        // zoom: 100,
       },
     }
 
@@ -168,13 +168,23 @@ export function App() {
   }, [])
 
   return (
-    <main className="relative">
-      <video ref={videoRef}></video>
+    <>
+      <video
+        ref={videoRef}
+        className="fixed right-0 bottom-0 min-h-full min-w-full"
+      ></video>
 
-      <p className="absolute bottom-4 left-[45%] text-2xl text-white font-bold">
+      <p className="fixed bottom-4 left-0 right-0 text-center text-2xl text-black font-bold">
         {detectedSign}
       </p>
-    </main>
+    </>
+    // <main className="relative">
+    //   <video ref={videoRef}></video>
+
+    // <p className="absolute bottom-4 left-[45%] text-2xl text-white font-bold">
+    //   {detectedSign}
+    // </p>
+    // </main>
     // <Webcam
     //   videoConstraints={{
     //     frameRate: 60,
