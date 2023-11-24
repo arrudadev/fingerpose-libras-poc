@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from 'react'
 
 import { knownGestures } from './signs'
 import { detectSign } from './utils/detectSign'
-// import Webcam from 'react-webcam'
 
 export function App() {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -29,21 +28,15 @@ export function App() {
   async function setupCamera() {
     const camera = getCamera()
 
-    // camera.height = globalThis.screen.height
-    // camera.width = globalThis.screen.width
-
     const videoConfig = {
       audio: false,
       video: {
-        // width: globalThis.screen.width,
-        // height: globalThis.screen.height,
-        // frameRate: {
-        //   ideal: 60,
-        // },
-        // facingMode: {
-        //   exact: 'user',
-        // },
-        // zoom: 100,
+        frameRate: {
+          ideal: 60,
+        },
+        facingMode: {
+          exact: 'user',
+        },
       },
     }
 
@@ -169,6 +162,10 @@ export function App() {
 
   return (
     <>
+      <h1 className="fixed top-4 left-0 right-0 text-center text-2xl text-black font-bold">
+        Libras interpreter
+      </h1>
+
       <video
         ref={videoRef}
         className="fixed right-0 bottom-0 min-h-full min-w-full"
@@ -178,26 +175,5 @@ export function App() {
         {detectedSign}
       </p>
     </>
-    // <main className="relative">
-    //   <video ref={videoRef}></video>
-
-    // <p className="absolute bottom-4 left-[45%] text-2xl text-white font-bold">
-    //   {detectedSign}
-    // </p>
-    // </main>
-    // <Webcam
-    //   videoConstraints={{
-    //     frameRate: 60,
-    //     width: { min: 640, ideal: 1920, max: 1920 },
-    //     height: { min: 400, ideal: 1080 },
-    //   }}
-    //   // style={{
-    //   //   height: '100vh',
-    //   //   width: '100%',
-    //   //   objectFit: 'cover',
-    //   //   position: 'absolute',
-    //   //   transform: 'scale(0.75)',
-    //   // }}
-    // />
   )
 }
