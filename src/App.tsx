@@ -28,13 +28,19 @@ export function App() {
   async function setupCamera() {
     const camera = getCamera()
 
+    camera.height = globalThis.screen.height
+    camera.width = globalThis.screen.width
+
     const videoConfig = {
       audio: false,
       video: {
-        width: globalThis.screen.availWidth,
-        height: globalThis.screen.availHeight,
+        width: globalThis.screen.width,
+        height: globalThis.screen.height,
         frameRate: {
           ideal: 60,
+        },
+        facingMode: {
+          exact: 'user',
         },
       },
     }
@@ -96,7 +102,12 @@ export function App() {
         TRUST_PERCENTAGE,
       )
 
-      console.log(gestures, poseData)
+      // eslint-disable-next-line
+      // @ts-ignore
+      const env = process.env.NODE_ENV
+      if (env === 'development') {
+        console.log(gestures, poseData)
+      }
 
       if (!gestures.length) {
         continue
@@ -155,18 +166,12 @@ export function App() {
   }, [])
 
   return (
-    <main className="container">
-      <h1 className="text-xl font-bold my-4">Libras Interpreter</h1>
+    <main className="relative">
+      <video className="h-screen w-screen object-fill" ref={videoRef}></video>
 
-      <div className="h-full w-full shadow-xl p-4 rounded">
-        <video ref={videoRef}></video>
-      </div>
-
-      <h3 className="font-semibold mt-4">Output</h3>
-
-      <div className="w-full h-80 sm:h-52 border shadow-xl mt-4 rounded flex items-center justify-center">
-        <p className="font-bold text-5xl">{detectedSign}</p>
-      </div>
+      <p className="absolute bottom-4 left-[45%] text-2xl text-white font-bold">
+        {detectedSign}
+      </p>
     </main>
   )
 }
