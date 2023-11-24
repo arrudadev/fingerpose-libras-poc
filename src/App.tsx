@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { knownGestures } from './signs'
 import { detectSign } from './utils/detectSign'
-import Webcam from 'react-webcam'
+// import Webcam from 'react-webcam'
 
 export function App() {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -26,37 +26,38 @@ export function App() {
     return videoRef.current as HTMLVideoElement
   }
 
-  // async function setupCamera() {
-  //   const camera = getCamera()
+  async function setupCamera() {
+    const camera = getCamera()
 
-  //   camera.height = globalThis.screen.height
-  //   camera.width = globalThis.screen.width
+    camera.height = globalThis.screen.height
+    camera.width = globalThis.screen.width
 
-  //   const videoConfig = {
-  //     audio: false,
-  //     video: {
-  //       width: globalThis.screen.width,
-  //       height: globalThis.screen.height,
-  //       frameRate: {
-  //         ideal: 60,
-  //       },
-  //       facingMode: {
-  //         exact: 'user',
-  //       },
-  //     },
-  //   }
+    const videoConfig = {
+      audio: false,
+      video: {
+        width: globalThis.screen.width,
+        height: globalThis.screen.height,
+        frameRate: {
+          ideal: 60,
+        },
+        facingMode: {
+          exact: 'user',
+        },
+        zoom: 100,
+      },
+    }
 
-  //   const stream = await navigator.mediaDevices.getUserMedia(videoConfig)
-  //   camera.srcObject = stream
+    const stream = await navigator.mediaDevices.getUserMedia(videoConfig)
+    camera.srcObject = stream
 
-  //   await new Promise((resolve) => {
-  //     camera.onloadedmetadata = () => {
-  //       resolve(videoRef.current)
-  //     }
-  //   })
+    await new Promise((resolve) => {
+      camera.onloadedmetadata = () => {
+        resolve(videoRef.current)
+      }
+    })
 
-  //   camera.play()
-  // }
+    camera.play()
+  }
 
   async function loadModel() {
     if (!detector) {
@@ -154,7 +155,7 @@ export function App() {
       )
     }
 
-    // await setupCamera()
+    await setupCamera()
     await loadModel()
     setupFingerpose()
     estimateHandsFrameLoop()
@@ -166,30 +167,27 @@ export function App() {
     return () => cancelAnimationFrame(frame.current)
   }, [])
 
-  console.log(window.innerHeight)
-  console.log(detectedSign)
-
   return (
-    // <main className="relative">
-    //   <video className="h-screen w-screen object-fill" ref={videoRef}></video>
+    <main className="relative">
+      <video ref={videoRef}></video>
 
-    //   <p className="absolute bottom-4 left-[45%] text-2xl text-white font-bold">
-    //     {detectedSign}
-    //   </p>
-    // </main>
-    <Webcam
-      videoConstraints={{
-        frameRate: 60,
-        height: window.screen.height,
-        width: window.screen.width,
-      }}
-      style={{
-        height: '100vh',
-        width: '100%',
-        objectFit: 'cover',
-        position: 'absolute',
-        transform: 'scale(0.75)',
-      }}
-    />
+      <p className="absolute bottom-4 left-[45%] text-2xl text-white font-bold">
+        {detectedSign}
+      </p>
+    </main>
+    // <Webcam
+    //   videoConstraints={{
+    //     frameRate: 60,
+    //     width: { min: 640, ideal: 1920, max: 1920 },
+    //     height: { min: 400, ideal: 1080 },
+    //   }}
+    //   // style={{
+    //   //   height: '100vh',
+    //   //   width: '100%',
+    //   //   objectFit: 'cover',
+    //   //   position: 'absolute',
+    //   //   transform: 'scale(0.75)',
+    //   // }}
+    // />
   )
 }
