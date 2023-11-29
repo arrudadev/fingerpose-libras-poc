@@ -187,7 +187,7 @@ export function App() {
       // @ts-ignore
       const env = process.env.NODE_ENV
       if (env === 'development') {
-        console.log(gestures, poseData)
+        console.log(gestures, poseData, handsPredictions)
       }
 
       if (!gestures.length) {

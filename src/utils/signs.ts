@@ -29,4 +29,10 @@ export const signs: any = [
     right: 'negative',
     sign: 'Negativo',
   },
+  {
+    needTwoHands: false,
+    left: 'B',
+    right: 'B',
+    sign: 'B',
+  },
 ]
